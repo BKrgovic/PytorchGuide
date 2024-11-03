@@ -39,6 +39,8 @@ class NeuralNetwork(nn.Module):
         return logits
 
 model = NeuralNetwork()
+model.load_state_dict(torch.load(r"C:\Users\bkrgo\OneDrive\Desktop\Pytorch\statedict", weights_only=True))
+model.eval()
 learning_rate = 1e-3
 batch_size = 64
 epochs = 5
@@ -86,9 +88,19 @@ def test_loop(dataloader, model, loss_fn):
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-epochs = 10
-for t in range(epochs):
-    print(f"Epoch {t+1}\n-------------------------------")
-    train_loop(train_dataloader, model, loss_fn, optimizer)
-    test_loop(test_dataloader, model, loss_fn)
-print("Done!")
+if __name__ == "__main__":
+    # Training configuration
+    learning_rate = 1e-3
+    epochs = 5
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+
+    # Run the training loop
+    for t in range(epochs):
+        print(f"Epoch {t+1}\n-------------------------------")
+        train_loop(train_dataloader, model, loss_fn, optimizer)
+        test_loop(test_dataloader, model, loss_fn)
+    print("Done!")
+
+    # Save the trained model weights
+    torch.save(model.state_dict(), r"C:\Users\bkrgo\OneDrive\Desktop\Pytorch\statedict")
